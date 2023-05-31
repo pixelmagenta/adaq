@@ -1,0 +1,8 @@
+LICENSE
+README.md
+setup.py
+pybrat/__init__.py
+pybrat.egg-info/PKG-INFO
+pybrat.egg-info/SOURCES.txt
+pybrat.egg-info/dependency_links.txt
+pybrat.egg-info/top_level.txt
