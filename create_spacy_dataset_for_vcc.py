@@ -1,3 +1,7 @@
+"""
+Forms a dataset for cue classifier training
+"""
+
 from parc3corpus import Parc3Corpus
 from spacy.tokens import DocBin, Doc, Span
 from spacy.training import Example
