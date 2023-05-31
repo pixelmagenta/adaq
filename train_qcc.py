@@ -1,3 +1,7 @@
+"""
+Runs content classifier training
+"""
+
 from parc3corpus import Parc3Corpus
 from sklearn_crfsuite import metrics
 from spacy.training import tags_to_entities, iob_to_biluo, biluo_to_iob, offsets_to_biluo_tags
@@ -65,6 +69,7 @@ if __name__ == '__main__':
         arr = [x + '-X' if x in ['B', 'I'] else x for x in arr]
         return tags_to_entities(iob_to_biluo(arr))
 
+    #calcualation of metrics following Newell et al. (strict evaluation)
     def f1_bbc(y_true, y_pred):
         tp = 0
         fp = 0

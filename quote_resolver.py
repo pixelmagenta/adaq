@@ -1,9 +1,14 @@
+"""
+Connects together results of content and source resolvers
+"""
+
 from spacy.language import Language
 from spacy.tokens import Doc
 
 if not Doc.has_extension("quotes"):
     Doc.set_extension("quotes", default={})
 
+#pipeline for the quote resolver function
 @Language.component("quote_resolver",
                    assigns=["doc._.quotes"],
                    requires=["doc._.cue_to_content", "doc._.cue_to_source"])

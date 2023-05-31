@@ -1,3 +1,7 @@
+"""
+Predicts content labels
+"""
+
 from spacy.tokens import Token, Doc
 from spacy.language import Language
 from spacy.training import iob_to_biluo, biluo_tags_to_spans
@@ -5,7 +9,8 @@ import pickle
 
 if not Token.has_extension("content_features"):
     Token.set_extension("content_features", default=[])
-    
+
+#pipeline for text features generation
 @Language.component("content_classifier_text_features",
                    assigns=["token._.content_features"],
                    requires=["doc._.verb_cues"])         
@@ -17,6 +22,7 @@ def content_classifier_lang_features(doc):
         token._.content_features['next_5_text'] = doc[token.i+1:token.i+6].text
     return doc
 
+#pipeline for non-text features generation
 @Language.component("content_classifier_features",
                    assigns=["token._.content_features"],
                    requires=["doc._.verb_cues"])         
@@ -51,13 +57,14 @@ def content_classifier_features(doc):
             token._.content_features['sentence_has_verb_cue'] = True
     return doc
 
-
+#pipeline for the model trained with text features
 @Language.factory("content_text_classifier",
                    assigns=["token._.content_label", "doc._.content_spans"],
                    requires=["token._.content_features"])
 def create_qcc(nlp, name):
     return ContentClassifier('qcc_model.pkl') 
 
+#pipeline for the model trained without text features
 @Language.factory("content_classifier",
                    assigns=["token._.content_label", "doc._.content_spans"],
                    requires=["token._.content_features"])

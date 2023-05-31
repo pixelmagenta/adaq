@@ -1,3 +1,7 @@
+"""
+Predicts source labels
+"""
+
 from spacy.tokens import Token, Doc
 from spacy.language import Language
 from spacy.training import iob_to_biluo, biluo_tags_to_spans, biluo_to_iob, offsets_to_biluo_tags
@@ -5,7 +9,8 @@ import pickle
 
 if not Token.has_extension("source_features"):
     Token.set_extension("source_features", default=[])
-    
+ 
+#pipeline for text features generation   
 @Language.component("source_classifier_text_features",
                    assigns=["token._.source_features"],
                    requires=["doc._.verb_cues"])         
@@ -17,7 +22,7 @@ def source_classifier_lang_features(doc):
         token._.source_features['next_5_text'] = doc[token.i+1:token.i+6].text
     return doc
 
-
+#pipeline for non-text features generation
 @Language.component("source_classifier_features",
                    assigns=["token._.source_features"],
                    requires=["doc._.verb_cues", "token._.content_label"])         
@@ -65,13 +70,14 @@ def source_classifier_features(doc):
             token._.source_features['sentence_has_verb_cue'] = True
     return doc
 
-
+#pipeline for the model trained with text features
 @Language.factory("source_text_classifier",
                    assigns=["token._.source_label"],
                    requires=["token._.source_features"])
 def create_qsc(nlp, name):
     return SourceClassifier('qsc_model.pkl') 
 
+#pipeline for the model trained without text features
 @Language.factory("source_classifier",
                    assigns=["token._.source_label"],
                    requires=["token._.source_features"])

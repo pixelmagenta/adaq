@@ -1,3 +1,7 @@
+"""
+Loads and preprocesses PARC dataset
+"""
+
 from typing import Optional, Union, List, Iterable, Iterator, TYPE_CHECKING, Callable
 from pathlib import Path
 from spacy import util

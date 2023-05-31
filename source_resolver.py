@@ -1,3 +1,7 @@
+"""
+Predicts if source and cue belong to the same quotation
+"""
+
 from parc3corpus import Parc3Corpus
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
@@ -26,6 +30,7 @@ def create_training_set(examples, nlp):
                 y.append(1 if verb_cue.label == source.label else 0)
     return X, y
 
+#pipeline for the source resolver model
 @Language.factory("source_resolver",
                    assigns=["doc._.cue_to_source"],
                    requires=["doc._.verb_cues", "doc._.source_spans"])
@@ -67,6 +72,7 @@ if __name__ == '__main__':
     c = Parc3Corpus(f'./data/parc3/dev/')
     X_dev, y_dev = create_training_set(c(nlp), nlp)
 
+    #training of the source resolver model
     clf = LogisticRegression()
     clf.fit(X_train, y_train)
 
